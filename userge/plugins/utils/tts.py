@@ -85,6 +85,7 @@ async def tts(message: Message):
     replied = message.reply_to_message
     if not text and replied:
         text = replied.message
+        await message.delete()
     if text:
         generate_voice(text, "talking.mp3")
         await message._client.send_voice(chat_id=message.chat.id,

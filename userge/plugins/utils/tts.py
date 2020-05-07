@@ -2,6 +2,7 @@ import re
 import urllib.parse
 import requests
 from userge import userge, Message, Config
+import pydub
 
 encodeURIComponent = urllib.parse.quote_plus
 
@@ -55,4 +56,11 @@ def generate_voice(text, file_out, voice=voices[5]):
              ".tts [reply to message]"}, del_pre=True)
 async def tts(message: Message):
     text = message.filtered_input_str
-    await message.edit("Working!")
+    replied = message.reply_to_message
+    if not text and replid:
+        text = replied.message
+    if text:
+        generate_voice(text, "talking.mp3")
+        await message.edit_or_send_as_file(open("talking.mp3", "rb"))
+    else:
+        await message.edit("Please specify the text!")

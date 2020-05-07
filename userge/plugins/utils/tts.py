@@ -23,7 +23,7 @@ def generate_voice(text, file_out, voice=voices[5]):
 @userge.on_cmd("tts", about={
     'header': "Read the given Text in English",
     'usage': ".tts Text to read"
-             ".tts [reply to message]}, del_pre=True)
+             ".tts [reply to message]"}, del_pre=True)
 async def tts(message: Message):
     text = message.filtered_input_str
     await message.edit("Working!")

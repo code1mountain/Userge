@@ -1,6 +1,7 @@
 import re
 import urllib.parse
 import requests
+from userge import userge, Message, Config
 
 encodeURIComponent = urllib.parse.quote_plus
 

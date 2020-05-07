@@ -2,7 +2,8 @@ import re
 import urllib.parse
 import requests
 from userge import userge, Message, Config
-import pydub
+from pydub import AudioSegment
+import os.path
 
 encodeURIComponent = urllib.parse.quote_plus
 
@@ -37,6 +38,21 @@ voices = [
     {"voiceName": "IBM-Watson Brazilian Portuguese (IsabelaV3)", "lang": "pt-BR", "gender": "female"}
   ]
 
+pattern2 = r"\n *\n"
+
+def split_string(text, maxlength=4700):
+  while text:
+    if len(text) < 4700:
+      yield text
+      return
+    sub = text[:4700]
+    index = [(m.start(0), m.end(0)) for m in re.finditer(pattern2, sub)][-1]
+    if index[0] <= 0:
+      index=(4700, 4700)
+    yield sub[:index[0]]
+    text = text[index[1]:]
+
+
 def getAudioUrl(text, voice):
     matches = re.findall("^IBM-Watson .* \((.+)\)$", voice["voiceName"])
     voiceName = voice["lang"] + "_" + matches[0] + "Voice"
@@ -44,10 +60,20 @@ def getAudioUrl(text, voice):
 
 
 def generate_voice(text, file_out, voice=voices[5]):
-    url = getAudioUrl(text, voice)
-    r = requests.get(url)
-    with open(file_out, "wb") as f:
-        f.write(r.content)
+    playlist = AudioSegment.silent(duration=100)
+    for t in split_string(text):
+        
+        url = getAudioUrl(t, voice)
+        r = requests.get(url)
+        with open(file_out, "wb") as f:
+            f.write(r.content)
+        while os.path.getsize(file_out) < 2000:
+            url = getAudioUrl(text, voice)
+            r = requests.get(url)
+            with open(file_out, "wb") as f:
+                f.write(r.content)
+        playlist = playlist.append(AudioSegment.from_mp3(file_out))
+    playlist.export(file_out, format='mp3').close()
 
 
 @userge.on_cmd("tts", about={

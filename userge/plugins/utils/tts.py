@@ -61,6 +61,6 @@ async def tts(message: Message):
         text = replied.message
     if text:
         generate_voice(text, "talking.mp3")
-        await message.edit_or_send_as_file(open("talking.mp3", "rb"))
+        await message.edit_or_send_as_file(open("talking.mp3", "rb").read())
     else:
         await message.edit("Please specify the text!")

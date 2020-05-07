@@ -61,8 +61,8 @@ async def tts(message: Message):
         text = replied.message
     if text:
         generate_voice(text, "talking.mp3")
-        await message._client.send_document(chat_id=message.chat.id,
-                                            document="talking.mp3",
-                                            disable_notification=True)
+        await message._client.send_voice(chat_id=message.chat.id,
+                                         voice="talking.mp3",
+                                         disable_notification=True)
     else:
         await message.edit("Please specify the text!")

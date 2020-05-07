@@ -85,9 +85,27 @@ async def tts(message: Message):
     replied = message.reply_to_message
     if not text and replied:
         text = replied.text
-        await message.delete()
     if text:
+        await message.delete()
         generate_voice(text, "talking.mp3")
+        await message._client.send_voice(chat_id=message.chat.id,
+                                         voice="talking.mp3",
+                                         disable_notification=True)
+    else:
+        await message.edit("Please specify the text!")
+        
+@userge.on_cmd("gts", about={
+    'header': "Read the given Text in English",
+    'usage': ".tts Text to read"
+             ".tts [reply to message]"}, del_pre=True)
+async def gts(message: Message):
+    text = message.filtered_input_str
+    replied = message.reply_to_message
+    if not text and replied:
+        text = replied.text
+    if text:
+        await message.delete()
+        generate_voice(text, "talking.mp3", voice=voices[17])
         await message._client.send_voice(chat_id=message.chat.id,
                                          voice="talking.mp3",
                                          disable_notification=True)

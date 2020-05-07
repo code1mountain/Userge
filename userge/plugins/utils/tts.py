@@ -3,9 +3,38 @@ import urllib.parse
 import requests
 import pydubs
 
-
-
 encodeURIComponent = urllib.parse.quote_plus
+
+voices = [
+    {"voiceName": "IBM-Watson American English (Allison)", "lang": "en-US", "gender": "female"},
+    {"voiceName": "IBM-Watson American English (AllisonV3)", "lang": "en-US", "gender": "female"},
+    {"voiceName": "IBM-Watson American English (Lisa)", "lang": "en-US", "gender": "female"},
+    {"voiceName": "IBM-Watson American English (LisaV3)", "lang": "en-US", "gender": "female"},
+    {"voiceName": "IBM-Watson American English (Michael)", "lang": "en-US", "gender": "male"},
+    {"voiceName": "IBM-Watson American English (MichaelV3)", "lang": "en-US", "gender": "male"},
+    {"voiceName": "IBM-Watson British English (Kate)", "lang": "en-GB", "gender": "female"},
+    {"voiceName": "IBM-Watson British English (KateV3)", "lang": "en-GB", "gender": "female"},
+    {"voiceName": "IBM-Watson Castilian Spanish (Enrique)", "lang": "es-ES", "gender": "male"},
+    {"voiceName": "IBM-Watson Castilian Spanish (EnriqueV3)", "lang": "es-ES", "gender": "male"},
+    {"voiceName": "IBM-Watson Castilian Spanish (Laura)", "lang": "es-ES", "gender": "female"},
+    {"voiceName": "IBM-Watson Castilian Spanish (LauraV3)", "lang": "es-ES", "gender": "female"},
+    {"voiceName": "IBM-Watson Latin American Spanish (Sofia)", "lang": "es-LA", "gender": "female"},
+    {"voiceName": "IBM-Watson Latin American Spanish (SofiaV3)", "lang": "es-LA", "gender": "female"},
+    {"voiceName": "IBM-Watson North American Spanish (Sofia)", "lang": "es-US", "gender": "female"},
+    {"voiceName": "IBM-Watson North American Spanish (SofiaV3)", "lang": "es-US", "gender": "female"},
+    {"voiceName": "IBM-Watson German (Dieter)", "lang": "de-DE", "gender": "male"},
+    {"voiceName": "IBM-Watson German (DieterV3)", "lang": "de-DE", "gender": "male"},
+    {"voiceName": "IBM-Watson German (Birgit)", "lang": "de-DE", "gender": "female"},
+    {"voiceName": "IBM-Watson German (BirgitV3)", "lang": "de-DE", "gender": "female"},
+    {"voiceName": "IBM-Watson French (Renee)", "lang": "fr-FR", "gender": "female"},
+    {"voiceName": "IBM-Watson French (ReneeV3)", "lang": "fr-FR", "gender": "female"},
+    {"voiceName": "IBM-Watson Italian (Francesca)", "lang": "it-IT", "gender": "female"},
+    {"voiceName": "IBM-Watson Italian (FrancescaV3)", "lang": "it-IT", "gender": "female"},
+    {"voiceName": "IBM-Watson Japanese (Emi)", "lang": "ja-JP", "gender": "female"},
+    {"voiceName": "IBM-Watson Japanese (EmiV3)", "lang": "ja-JP", "gender": "female"},
+    {"voiceName": "IBM-Watson Brazilian Portuguese (Isabela)", "lang": "pt-BR", "gender": "female"},
+    {"voiceName": "IBM-Watson Brazilian Portuguese (IsabelaV3)", "lang": "pt-BR", "gender": "female"}
+  ]
 
 def getAudioUrl(text, voice):
     matches = re.findall("^IBM-Watson .* \((.+)\)$", voice["voiceName"])

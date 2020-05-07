@@ -57,7 +57,7 @@ def generate_voice(text, file_out, voice=voices[5]):
 async def tts(message: Message):
     text = message.filtered_input_str
     replied = message.reply_to_message
-    if not text and replid:
+    if not text and replied:
         text = replied.message
     if text:
         generate_voice(text, "talking.mp3")

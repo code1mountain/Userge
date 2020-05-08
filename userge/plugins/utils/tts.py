@@ -64,11 +64,11 @@ def generate_voice(text, file_out, voice=voices[5]):
     for t in split_string(text):
         
         url = getAudioUrl(t, voice)
-        r = requests.get(url, timeout=10000)
+        r = requests.get(url)
         with open(file_out, "wb") as f:
             f.write(r.content)
         n = 0
-        while os.path.getsize(file_out) < 2000 and n > 5:
+        while os.path.getsize(file_out) < 2000 and n < 5:
             n += 1
             url = getAudioUrl(text, voice)
             r = requests.get(url)

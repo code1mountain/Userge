@@ -71,17 +71,16 @@ def getAudioUrl(text, voice):
     voiceName = voice["lang"] + "_" + matches[0] + "Voice"
     return "https://text-to-speech-demo.ng.bluemix.net/api/v2/synthesize?text=" + encodeURIComponent(text) + "&voice=" + encodeURIComponent(voiceName) + "&download=true&accept=audio%2Fmp3"
 
-
 def generate_voice(text, file_out, voice=voices[8]):
     playlist = AudioSegment.silent(duration=100)
     for t in split_string(text):
         
         url = getAudioUrl(t, voice)
+        print(url)
         r = requests.get(url)
         with open(file_out, "wb") as f:
             f.write(r.content)
         while os.path.getsize(file_out) < 2000:
-            url = getAudioUrl(text, voice)
             r = requests.get(url)
             with open(file_out, "wb") as f:
                 f.write(r.content)

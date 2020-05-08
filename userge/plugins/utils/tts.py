@@ -10,16 +10,26 @@ encodeURIComponent = urllib.parse.quote_plus
 voices = [
     {"voiceName": "IBM-Watson American English (Allison)", "lang": "en-US", "gender": "female"},
     {"voiceName": "IBM-Watson American English (AllisonV3)", "lang": "en-US", "gender": "female"},
+    {"voiceName": "IBM-Watson American English (EmilyV3)", "lang": "en-US", "gender": "female"},
+    {"voiceName": "IBM-Watson American English (HenryV3)", "lang": "en-US", "gender": "male"},
+    {"voiceName": "IBM-Watson American English (KevinV3)", "lang": "en-US", "gender": "male"},
     {"voiceName": "IBM-Watson American English (Lisa)", "lang": "en-US", "gender": "female"},
     {"voiceName": "IBM-Watson American English (LisaV3)", "lang": "en-US", "gender": "female"},
     {"voiceName": "IBM-Watson American English (Michael)", "lang": "en-US", "gender": "male"},
     {"voiceName": "IBM-Watson American English (MichaelV3)", "lang": "en-US", "gender": "male"},
+    {"voiceName": "IBM-Watson American English (OliviaV3)", "lang": "en-US", "gender": "female"},
+    {"voiceName": "IBM-Watson Arabic (Omar)", "lang": "ar-AR", "gender": "male"},
     {"voiceName": "IBM-Watson British English (Kate)", "lang": "en-GB", "gender": "female"},
     {"voiceName": "IBM-Watson British English (KateV3)", "lang": "en-GB", "gender": "female"},
     {"voiceName": "IBM-Watson Castilian Spanish (Enrique)", "lang": "es-ES", "gender": "male"},
     {"voiceName": "IBM-Watson Castilian Spanish (EnriqueV3)", "lang": "es-ES", "gender": "male"},
     {"voiceName": "IBM-Watson Castilian Spanish (Laura)", "lang": "es-ES", "gender": "female"},
     {"voiceName": "IBM-Watson Castilian Spanish (LauraV3)", "lang": "es-ES", "gender": "female"},
+    {"voiceName": "IBM-Watson Chinese, Mandarin (LiNa)", "lang": "zh-CN", "gender": "female"},
+    {"voiceName": "IBM-Watson Chinese, Mandarin (WangWei)", "lang": "zh-CN", "gender": "male"},
+    {"voiceName": "IBM-Watson Chinese, Mandarin (ZhangJing)", "lang": "zh-CN", "gender": "female"},
+    {"voiceName": "IBM-Watson Dutch (Emma)", "lang": "nl-NL", "gender": "female"},
+    {"voiceName": "IBM-Watson Dutch (Liam)", "lang": "nl-NL", "gender": "male"},
     {"voiceName": "IBM-Watson Latin American Spanish (Sofia)", "lang": "es-LA", "gender": "female"},
     {"voiceName": "IBM-Watson Latin American Spanish (SofiaV3)", "lang": "es-LA", "gender": "female"},
     {"voiceName": "IBM-Watson North American Spanish (Sofia)", "lang": "es-US", "gender": "female"},
@@ -28,12 +38,15 @@ voices = [
     {"voiceName": "IBM-Watson German (DieterV3)", "lang": "de-DE", "gender": "male"},
     {"voiceName": "IBM-Watson German (Birgit)", "lang": "de-DE", "gender": "female"},
     {"voiceName": "IBM-Watson German (BirgitV3)", "lang": "de-DE", "gender": "female"},
+    {"voiceName": "IBM-Watson German (ErikaV3)", "lang": "de-DE", "gender": "female"},
     {"voiceName": "IBM-Watson French (Renee)", "lang": "fr-FR", "gender": "female"},
     {"voiceName": "IBM-Watson French (ReneeV3)", "lang": "fr-FR", "gender": "female"},
     {"voiceName": "IBM-Watson Italian (Francesca)", "lang": "it-IT", "gender": "female"},
     {"voiceName": "IBM-Watson Italian (FrancescaV3)", "lang": "it-IT", "gender": "female"},
     {"voiceName": "IBM-Watson Japanese (Emi)", "lang": "ja-JP", "gender": "female"},
     {"voiceName": "IBM-Watson Japanese (EmiV3)", "lang": "ja-JP", "gender": "female"},
+    {"voiceName": "IBM-Watson Korean (Youngmi)", "lang": "ko-KR", "gender": "female"},
+    {"voiceName": "IBM-Watson Korean (Yuna)", "lang": "ko-KR", "gender": "female"},
     {"voiceName": "IBM-Watson Brazilian Portuguese (Isabela)", "lang": "pt-BR", "gender": "female"},
     {"voiceName": "IBM-Watson Brazilian Portuguese (IsabelaV3)", "lang": "pt-BR", "gender": "female"}
   ]
@@ -59,7 +72,7 @@ def getAudioUrl(text, voice):
     return "https://text-to-speech-demo.ng.bluemix.net/api/v2/synthesize?text=" + encodeURIComponent(text) + "&voice=" + encodeURIComponent(voiceName) + "&download=true&accept=audio%2Fmp3"
 
 
-def generate_voice(text, file_out, voice=voices[5]):
+def generate_voice(text, file_out, voice=voices[8]):
     playlist = AudioSegment.silent(duration=100)
     for t in split_string(text):
         
@@ -105,7 +118,7 @@ async def gts(message: Message):
         text = replied.text
     if text:
         await message.delete()
-        generate_voice(text, "talking.mp3", voice=voices[17])
+        generate_voice(text, "talking.mp3", voice=voices[27])
         await message._client.send_voice(chat_id=message.chat.id,
                                          voice="talking.mp3",
                                          disable_notification=True)

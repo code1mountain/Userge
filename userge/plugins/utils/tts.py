@@ -69,7 +69,7 @@ def split_string(text, maxlength=4700):
 def getAudioUrl(text, voice):
     matches = re.findall("^IBM-Watson .* \((.+)\)$", voice["voiceName"])
     voiceName = voice["lang"] + "_" + matches[0] + "Voice"
-    return "https://text-to-speech-demo.ng.bluemix.net/api/v2/synthesize?text=" + encodeURIComponent(text) + "&voice=" + encodeURIComponent(voiceName) + "&download=true&accept=audio%2Fmp3"
+    return "https://text-to-speech-demo.ng.bluemix.net/api/v3/synthesize?text=" + encodeURIComponent(text) + "&voice=" + encodeURIComponent(voiceName) + "&download=true&accept=audio%2Fmp3"
 
 def generate_voice(text, file_out, voice=voices[8]):
     playlist = AudioSegment.silent(duration=100)

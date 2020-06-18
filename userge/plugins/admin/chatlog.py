@@ -7,6 +7,6 @@ async def gts(message: Message):
     n = 0
     text = message.filtered_input_str
     chat = await userge.get_chat(text)
-    for member in message._client.iter_chat_members(chat):
+    async for member in message._client.iter_chat_members(chat):
         n += 1
     await message.edit(str(member) + " " + str(n))

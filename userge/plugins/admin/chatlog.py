@@ -20,5 +20,5 @@ async def gts(message: Message):
             "phone_number": member.user.phone_number,
             "status": member.status
         })
-    #await message.edit(str(member) + " " + str(n))
+
     await message.send_as_file(json.dumps(obj, indent=4), filename="members_log.json")

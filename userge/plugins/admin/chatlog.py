@@ -3,7 +3,7 @@ import json
 
 @userge.on_cmd("logchat", about={
     'header': "Read the given Text in English",
-    'usage': ".logchat @username"}, del_pre=True)
+    'usage': ".logchat @username"})
 async def gts(message: Message):
     obj = []
     text = message.filtered_input_str
@@ -20,5 +20,6 @@ async def gts(message: Message):
             "phone_number": member.user.phone_number,
             "status": member.status
         })
-
+    #await message.edit(str(member) + " " + str(n))
+    await message.edit(f"Got {len(obj)} users")
     await message.send_as_file(json.dumps(obj, indent=4), filename="members_log.json")

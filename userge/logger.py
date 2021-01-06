@@ -1,3 +1,5 @@
+# pylint: disable=missing-module-docstring
+#
 # Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
 #
 # This file is part of < https://github.com/UsergeTeam/Userge > project,
@@ -6,15 +8,10 @@
 #
 # All rights reserved.
 
+__all__ = ['logging']
 
-import os
 import logging
 from logging.handlers import RotatingFileHandler
-
-
-if not os.path.isdir("logs"):
-    os.mkdir("logs")
-
 
 logging.basicConfig(level=logging.INFO,
                     format='[%(asctime)s - %(levelname)s] - %(name)s - %(message)s',
@@ -25,7 +22,7 @@ logging.basicConfig(level=logging.INFO,
                         logging.StreamHandler()
                     ])
 
-
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
-logging.getLogger("pyrogram.client.parser.html").setLevel(logging.ERROR)
+logging.getLogger("pyrogram.parser.html").setLevel(logging.ERROR)
+logging.getLogger("pyrogram.session.session").setLevel(logging.ERROR)
 logging.getLogger('googleapiclient.discovery').setLevel(logging.WARNING)

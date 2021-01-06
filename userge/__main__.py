@@ -1,3 +1,5 @@
+# pylint: disable=missing-module-docstring
+#
 # Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
 #
 # This file is part of < https://github.com/UsergeTeam/Userge > project,
@@ -6,9 +8,7 @@
 #
 # All rights reserved.
 
-
 from userge import userge
-
 
 if __name__ == "__main__":
     userge.begin()

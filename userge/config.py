@@ -1,3 +1,5 @@
+# pylint: disable=missing-module-docstring
+#
 # Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
 #
 # This file is part of < https://github.com/UsergeTeam/Userge > project,
@@ -6,141 +8,93 @@
 #
 # All rights reserved.
 
+__all__ = ['Config', 'get_version']
 
 import os
-import sys
-import shutil
 from typing import Set
 
 import heroku3
 from git import Repo
-from pySmartDL import SmartDL
-from dotenv import load_dotenv
-from pyrogram import Filters
+from pyrogram import filters
 
-from userge import logging
+from userge import logging, logbot
+from . import versions
 
-LOG = logging.getLogger(__name__)
-
-if sys.version_info[0] < 3 or sys.version_info[1] < 6:
-    LOG.info("You MUST have a python version of at least 3.6 !")
-    sys.exit()
-
-CONFIG_FILE = "config.env"
-
-if os.path.isfile(CONFIG_FILE):
-    LOG.info("%s Found and loading ...", CONFIG_FILE)
-    load_dotenv(CONFIG_FILE)
-
-if os.environ.get("_____REMOVE_____THIS_____LINE_____", None):
-    LOG.error("Please remove the line mentioned in the first hashtag from the config.env file")
-    sys.exit()
+_REPO = Repo()
+_LOG = logging.getLogger(__name__)
+logbot.reply_last_msg("Setting Configs ...")
 
 
 class Config:
-    """
-    Configs to setup Userge.
-    """
-
-    API_ID = int(os.environ.get("API_ID", 12345))
-
-    API_HASH = os.environ.get("API_HASH", None)
-
+    """ Configs to setup Userge """
+    API_ID = int(os.environ.get("API_ID"))
+    API_HASH = os.environ.get("API_HASH")
+    WORKERS = min(32, int(os.environ.get("WORKERS")) or os.cpu_count() + 4)
+    BOT_TOKEN = os.environ.get("BOT_TOKEN", None)
     HU_STRING_SESSION = os.environ.get("HU_STRING_SESSION", None)
-
-    DB_URI = os.environ.get("DATABASE_URL", None)
-
-    MAX_MESSAGE_LENGTH = 4096
-
-    LANG = os.environ.get("PREFERRED_LANGUAGE", "en")
-
-    DOWN_PATH = os.environ.get("DOWN_PATH", "downloads/")
-
-    SCREENSHOT_API = os.environ.get("SCREENSHOT_API", None)
-
+    OWNER_ID = tuple(filter(lambda x: x, map(int, os.environ.get("OWNER_ID", "0").split())))
+    LOG_CHANNEL_ID = int(os.environ.get("LOG_CHANNEL_ID"))
+    DB_URI = os.environ.get("DATABASE_URL")
+    LANG = os.environ.get("PREFERRED_LANGUAGE")
+    DOWN_PATH = os.environ.get("DOWN_PATH")
+    CMD_TRIGGER = os.environ.get("CMD_TRIGGER")
+    SUDO_TRIGGER = os.environ.get("SUDO_TRIGGER")
+    FINISHED_PROGRESS_STR = os.environ.get("FINISHED_PROGRESS_STR")
+    UNFINISHED_PROGRESS_STR = os.environ.get("UNFINISHED_PROGRESS_STR")
+    ALIVE_MEDIA = os.environ.get("ALIVE_MEDIA", None)
+    CUSTOM_PACK_NAME = os.environ.get("CUSTOM_PACK_NAME")
+    INSTA_ID = os.environ.get("INSTA_ID")
+    INSTA_PASS = os.environ.get("INSTA_PASS")
+    UPSTREAM_REPO = os.environ.get("UPSTREAM_REPO")
+    UPSTREAM_REMOTE = os.environ.get("UPSTREAM_REMOTE")
+    SPAM_WATCH_API = os.environ.get("SPAM_WATCH_API", None)
     CURRENCY_API = os.environ.get("CURRENCY_API", None)
-
+    OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
+    OPEN_WEATHER_MAP = os.environ.get("OPEN_WEATHER_MAP", None)
+    REMOVE_BG_API_KEY = os.environ.get("REMOVE_BG_API_KEY", None)
+    WEATHER_DEFCITY = os.environ.get("WEATHER_DEFCITY", None)
+    TZ_NUMBER = os.environ.get("TZ_NUMBER", 1)
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
-
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
-
     G_DRIVE_PARENT_ID = os.environ.get("G_DRIVE_PARENT_ID", None)
-
-    G_DRIVE_IS_TD = bool(os.environ.get("G_DRIVE_IS_TD", False))
-
-    LOG_CHANNEL_ID = int(os.environ.get("LOG_CHANNEL_ID", 0))
-
-    UPSTREAM_REPO = os.environ.get("UPSTREAM_REPO", "https://github.com/UsergeTeam/Userge")
-
+    G_DRIVE_INDEX_LINK = os.environ.get("G_DRIVE_INDEX_LINK", None)
+    GOOGLE_CHROME_DRIVER = os.environ.get("GOOGLE_CHROME_DRIVER", None)
+    GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", None)
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
-
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
-
-    HEROKU_APP = None
-
-    HEROKU_GIT_URL = None
-
-    PUSHING = False
-
+    G_DRIVE_IS_TD = os.environ.get("G_DRIVE_IS_TD") == "true"
+    LOAD_UNOFFICIAL_PLUGINS = os.environ.get(
+        "LOAD_UNOFFICIAL_PLUGINS") == "true"
+    THUMB_PATH = DOWN_PATH + "thumb_image.jpg"
+    TMP_PATH = "userge/plugins/temp/"
+    MAX_MESSAGE_LENGTH = 4096
     MSG_DELETE_TIMEOUT = 120
-
     WELCOME_DELETE_TIMEOUT = 120
-
-    ALLOWED_CHATS = Filters.chat([])
-
-    SUDO_TRIGGER = os.environ.get("SUDO_TRIGGER", '!')
-
+    EDIT_SLEEP_TIMEOUT = 10
+    AUTOPIC_TIMEOUT = 300
+    ALLOWED_CHATS = filters.chat([])
+    ALLOW_ALL_PMS = True
+    USE_USER_FOR_CLIENT_CHECKS = False
+    SUDO_ENABLED = False
     SUDO_USERS: Set[int] = set()
-
     ALLOWED_COMMANDS: Set[str] = set()
+    ANTISPAM_SENTRY = False
+    RUN_DYNO_SAVER = False
+    HEROKU_APP = heroku3.from_key(HEROKU_API_KEY).apps()[HEROKU_APP_NAME] \
+        if HEROKU_API_KEY and HEROKU_APP_NAME else None
+    STATUS = None
 
 
-if Config.SUDO_TRIGGER == '.':
-    LOG.info("Invalid SUDO_TRIGGER!, You can't use `.` as SUDO_TRIGGER")
-    sys.exit()
-
-if not os.path.isdir(Config.DOWN_PATH):
-    LOG.info("Creating Download Path...")
-    os.mkdir(Config.DOWN_PATH)
-
-if Config.HEROKU_API_KEY:
-    LOG.info("Checking Heroku App...")
-
-    for heroku_app in heroku3.from_key(Config.HEROKU_API_KEY).apps():
-        if heroku_app and Config.HEROKU_APP_NAME and \
-            heroku_app.name == Config.HEROKU_APP_NAME:
-
-            LOG.info("Heroku App : %s Found...", heroku_app.name)
-
-            Config.HEROKU_APP = heroku_app
-            Config.HEROKU_GIT_URL = heroku_app.git_url.replace(
-                "https://", "https://api:" + Config.HEROKU_API_KEY + "@")
-
-            if not os.path.isdir(os.path.join(os.getcwd(), '.git')):
-                tmp_heroku_git_path = os.path.join(os.getcwd(), 'tmp_heroku_git')
-
-                LOG.info("Cloning Heroku GIT...")
-
-                Repo.clone_from(Config.HEROKU_GIT_URL, tmp_heroku_git_path)
-                shutil.move(os.path.join(tmp_heroku_git_path, '.git'), os.getcwd())
-                shutil.rmtree(tmp_heroku_git_path)
-
-            break
-
-if not os.path.exists('bin'):
-    LOG.info("Creating BIN...")
-    os.mkdir('bin')
-
-BINS = {
-    "https://raw.githubusercontent.com/yshalsager/megadown/master/megadown":
-    "bin/megadown",
-    "https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py":
-    "bin/cmrudl"}
-
-LOG.info("Downloading BINs...")
-
-for binary, path in BINS.items():
-    LOG.debug("Downloading %s...", binary)
-    downloader = SmartDL(binary, path, progress_bar=False)
-    downloader.start()
-    os.chmod(path, 0o755)
+def get_version() -> str:
+    """ get userge version """
+    ver = f"{versions.__major__}.{versions.__minor__}.{versions.__micro__}"
+    if "/usergeteam/userge" in Config.UPSTREAM_REPO.lower():
+        diff = list(_REPO.iter_commits(f'v{ver}..HEAD'))
+        if diff:
+            return f"{ver}-patch.{len(diff)}"
+    else:
+        diff = list(_REPO.iter_commits(
+            f'{Config.UPSTREAM_REMOTE}/master..HEAD'))
+        if diff:
+            return f"{ver}-custom.{len(diff)}"
+    return ver

@@ -1,3 +1,5 @@
+# pylint: disable=missing-module-docstring
+#
 # Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
 #
 # This file is part of < https://github.com/UsergeTeam/Userge > project,
@@ -7,7 +9,13 @@
 # All rights reserved.
 
 
+class StopConversation(Exception):
+    """ raise if conversation has terminated """
+
+
 class ProcessCanceled(Exception):
-    """
-    Custom Exception to terminate threads.
-    """
+    """ raise if thread has terminated """
+
+
+class UsergeBotNotFound(Exception):
+    """ raise if userge bot not found """

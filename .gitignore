@@ -129,14 +129,21 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#configfile
+# config files
+.apt/
+.heroku/
+.profile.d/
+vendor/
 config.ini
 config.env
-.vscode/settings.json
+.vscode/
+.idea/
 *.session
-rn
 log.txt
-gen
 unknown_errors.txt
 logs/
 bin/
+resources/base_profile_pic.jpg
+resources/mdfy_profile_pic.jpg
+pictest.py
+resources/MutantAcademyBB.ttf
